@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+model Admin {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  @@map("admins")
+}
+
+model Doctor {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  specialization String
+  hospital       String
+  phone          String
+  email          String    @unique
+  patients       Patient[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([createdAt])
+  @@index([specialization])
+  @@index([hospital])
+  @@index([name])
+  @@map("doctors")
+}
+
+model Patient {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  age       Int
+  gender    Gender
+  phone     String
+  condition String
+  doctorId  String   @db.ObjectId
+  doctor    Doctor   @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([doctorId, createdAt])
+  @@index([condition])
+  @@index([createdAt])
+  @@index([name])
+  @@map("patients")
+}
