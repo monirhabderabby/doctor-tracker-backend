@@ -6,6 +6,7 @@ import morgan from "morgan";
 import { env } from "./config/env";
 import { errorHandler } from "./middlewares/errorHandler";
 import { notFound } from "./middlewares/notFound";
+import routes from "./routes";
 
 const app = express();
 
@@ -15,9 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
 
-app.get("/api/health", (_req, res) => {
-  res.json({ status: "ok" });
-});
+app.use("/api", routes);
 
 // app.use("/api", routes);  // module ready hole eikhane mount hobe
 
