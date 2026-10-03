@@ -10,6 +10,7 @@ const cookieOptions: CookieOptions = {
   secure: isProd,
   sameSite: isProd ? "none" : "lax",
   path: "/",
+  ...(env.COOKIE_DOMAIN ? { domain: env.COOKIE_DOMAIN } : {}),
 };
 
 export const authController = {
