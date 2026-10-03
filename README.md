@@ -3,8 +3,8 @@
 REST API for **Doctor Tracker**, a secure admin portal to manage doctors and their patients, with dashboard analytics. Built with Node.js, Express, TypeScript, Prisma and MongoDB.
 
 - Frontend repository: `https://github.com/monirhabderabby/doctor-tracker-website`
-- Live frontend: `http://localhost:3000`
-- Live API: `<API_BASE_URL>/api` (health check: `<API_BASE_URL>/api/health`)
+- Live frontend: `https://careguide.monirhrabby.com`
+- Live API: `https://careguideapi.monirhrabby.com/api` (health check: `<API_BASE_URL>/api/health`)
 
 ---
 
