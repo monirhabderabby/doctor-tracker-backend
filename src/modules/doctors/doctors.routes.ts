@@ -7,6 +7,7 @@ import {
   listDoctorsQuerySchema,
   updateDoctorSchema,
 } from "./doctors.schema";
+import doctorPatientsRoutes from "../doctor-patients/doctor-patients.routes";
 
 const router = Router();
 
@@ -34,6 +35,13 @@ router.delete(
   "/:id",
   validate({ params: idParamSchema }),
   doctorsController.remove,
+);
+
+// Nested patients routes: /api/doctors/:id/patients
+router.use(
+  "/:id/patients",
+  validate({ params: idParamSchema }),
+  doctorPatientsRoutes,
 );
 
 export default router;

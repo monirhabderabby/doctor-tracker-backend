@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "../../config/prisma";
 import { ApiError } from "../../utils/ApiError";
 import { buildMeta, getSkip } from "../../utils/pagination";
+import { endOfDay } from "../../utils/date";
 import type {
   CreateDoctorInput,
   ListDoctorsQuery,
@@ -30,13 +31,6 @@ const toResponse = <T extends { _count: { patients: number } }>({
   ...doctor,
   patientCount: _count.patients,
 });
-
-// Makes a date-only "to" filter include the whole day
-const endOfDay = (date: Date) => {
-  const d = new Date(date);
-  d.setUTCHours(23, 59, 59, 999);
-  return d;
-};
 
 export const doctorsService = {
   async create(input: CreateDoctorInput) {
