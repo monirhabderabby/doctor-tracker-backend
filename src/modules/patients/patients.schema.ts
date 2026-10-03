@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { paginationSchema } from "../../utils/pagination";
-import { emptyToUndefined } from "../../utils/validators";
+import { emptyToUndefined, objectId } from "../../utils/validators";
 
 // Accepts gender in any letter case, e.g. "male" becomes "MALE"
 const genderSchema = z.preprocess(
@@ -29,6 +29,31 @@ export const listPatientsQuerySchema = paginationSchema.extend({
     .enum(["newest", "oldest", "name_asc", "name_desc", "age_asc", "age_desc"])
     .default("newest"),
 });
+
+// Create from the patients page, so the doctor must be chosen in the body
+export const createPatientWithDoctorSchema = createPatientSchema.extend({
+  doctorId: objectId,
+});
+
+// Partial update, doctorId allowed for reassigning the patient
+export const updatePatientSchema = createPatientSchema
+  .partial()
+  .extend({ doctorId: objectId.optional() })
+  .refine(
+    (data) => Object.keys(data).length > 0,
+    "At least one field is required",
+  );
+
+// Same filters as the nested list, plus an optional doctor filter
+export const listAllPatientsQuerySchema = listPatientsQuerySchema.extend({
+  doctorId: z.preprocess(emptyToUndefined, objectId.optional()),
+});
+
+export type CreatePatientWithDoctorInput = z.infer<
+  typeof createPatientWithDoctorSchema
+>;
+export type UpdatePatientInput = z.infer<typeof updatePatientSchema>;
+export type ListAllPatientsQuery = z.infer<typeof listAllPatientsQuerySchema>;
 
 export type CreatePatientInput = z.infer<typeof createPatientSchema>;
 export type ListPatientsQuery = z.infer<typeof listPatientsQuerySchema>;

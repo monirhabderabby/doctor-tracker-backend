@@ -7,14 +7,7 @@ import type {
   ListPatientsQuery,
 } from "../patients/patients.schema";
 
-// Throws 404 if the doctor does not exist
-const assertDoctorExists = async (doctorId: string) => {
-  const doctor = await prisma.doctor.findUnique({
-    where: { id: doctorId },
-    select: { id: true },
-  });
-  if (!doctor) throw new ApiError(404, "Doctor not found");
-};
+import { assertDoctorExists } from "../doctors/doctors.utils";
 
 export const doctorPatientsService = {
   async list(doctorId: string, query: ListPatientsQuery) {
